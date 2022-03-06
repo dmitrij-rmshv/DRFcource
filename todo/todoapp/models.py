@@ -17,7 +17,10 @@ from main.models import TodoUser
 class Project(models.Model):
     title = models.CharField(max_length=64, verbose_name='Название проекта')
     repo_link = models.URLField(blank=True, verbose_name='ссылка на репозиторий')
-    developers = models.ManyToManyField(TodoUser, related_name='projects' verbose_name='пользователи проекта')
+    developers = models.ManyToManyField(TodoUser, related_name='projects', verbose_name='пользователи проекта')
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class ToDo(models.Model):
