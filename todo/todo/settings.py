@@ -134,5 +134,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.TodoUser'
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:3000",
+   'http://localhost:3000',
 ]
+
+REST_FRAMEWORK = {
+   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+   'PAGE_SIZE': 100
+}
