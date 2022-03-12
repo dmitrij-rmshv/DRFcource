@@ -10,8 +10,8 @@ class SimpleNoteModelSerializer(ModelSerializer):
 
 
 class TodoProjectModelSerializer(HyperlinkedModelSerializer):
-    developers = TodoUserModelSerializer(many=True)
-    notes = SimpleNoteModelSerializer(many=True)
+    # developers = TodoUserModelSerializer(many=True)
+    # notes = SimpleNoteModelSerializer(many=True)
     class Meta:
         model = Project
         fields = ('title', 'repo_link', 'developers', 'notes',)
