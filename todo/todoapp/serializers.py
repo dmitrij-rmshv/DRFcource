@@ -6,7 +6,7 @@ from main.serializers import TodoUserModelSerializer
 class SimpleNoteModelSerializer(ModelSerializer):
     class Meta:
         model = ToDo
-        fields = ('text', )
+        fields = ('project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
 
 
 class TodoProjectModelSerializer(HyperlinkedModelSerializer):
@@ -20,4 +20,4 @@ class TodoProjectModelSerializer(HyperlinkedModelSerializer):
 class TodoNoteModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = ToDo
-        fields = ('project', 'user', 'text', 'created_at', 'modified_at',)
+        fields = ('project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
