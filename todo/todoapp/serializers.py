@@ -1,4 +1,4 @@
-from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer, StringRelatedField
 from .models import Project, ToDo
 from main.serializers import TodoUserModelSerializer
 
@@ -17,7 +17,9 @@ class TodoProjectModelSerializer(HyperlinkedModelSerializer):
         fields = ('title', 'repo_link', 'developers', 'notes',)
 
 
-class TodoNoteModelSerializer(HyperlinkedModelSerializer):
+class TodoNoteModelSerializer(ModelSerializer):
+    project = StringRelatedField()
+    user = StringRelatedField()
     class Meta:
         model = ToDo
         fields = ('project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
