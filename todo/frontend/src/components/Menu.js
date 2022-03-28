@@ -14,10 +14,12 @@ const Menu = () => {
         <li>
           <Link to='/notes'>notes</Link>
         </li>
+        <li>
+          <Link to='/login'>Login</Link>
+        </li>
       </ul>
     </nav>
   )
 }
-
 
 export default Menu

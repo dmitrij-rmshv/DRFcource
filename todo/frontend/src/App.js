@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom'
 import './App.css';
 import UsersList from './components/Users.js';
 import ProjectList from './components/Projects';
 import ToDoList from './components/ToDo';
 import Menu from './components/Menu.js';
 import Footer from './components/Footer.js';
+import LoginForm from './components/Auth.js';
 
 const NotFound404 = ({ location }) => {
   return (
@@ -62,13 +63,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="App">
         <BrowserRouter>
           <Menu />
           <Switch>
             <Route exact path='/users' component={() => <UsersList users={this.state.users} />} />
             <Route exact path='/projects' component={() => <ProjectList items={this.state.projects} />} />
             <Route exact path='/notes' component={() => <ToDoList items={this.state.notes} />} />
+            <Route exact path='/login' component={() => <LoginForm />} />
             <Redirect from='/' to='/projects' />
             <Route component={NotFound404} />
           </Switch>
