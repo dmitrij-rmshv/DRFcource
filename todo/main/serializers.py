@@ -6,3 +6,9 @@ class TodoUserModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = TodoUser
         fields = ('uid', 'username', 'first_name', 'last_name', 'email')
+
+
+class EnlargedTodoUserModelSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = TodoUser
+        fields = ('uid', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff')
