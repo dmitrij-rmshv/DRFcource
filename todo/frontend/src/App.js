@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter, Route, Switch, Redirect, Link} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
 import './App.css';
 import Cookies from 'universal-cookie';
 
@@ -10,6 +10,7 @@ import ToDoList from './components/ToDo';
 // import Menu from './components/Menu.js';
 import Footer from './components/Footer.js';
 import LoginForm from './components/Auth.js';
+import ProjectForm from './components/ProjectForm.js';
 
 const NotFound404 = ({ location }) => {
   return (
@@ -34,7 +35,7 @@ class App extends React.Component {
   set_token(token) {
     const cookies = new Cookies()
     cookies.set('token', token)
-    this.setState({ 'token': token }, ()=>this.load_data())
+    this.setState({ 'token': token }, () => this.load_data())
   }
 
   is_authenticated() {
@@ -48,7 +49,7 @@ class App extends React.Component {
   get_token_from_storage() {
     const cookies = new Cookies()
     const token = cookies.get('token')
-    this.setState({ 'token': token }, ()=>this.load_data())
+    this.setState({ 'token': token }, () => this.load_data())
   }
 
   get_token(username, password) {
@@ -85,7 +86,7 @@ class App extends React.Component {
         console.log(error)
         this.setState({ users: [] })
       });
-    axios.get('http://127.0.0.1:8000/api/projects', {headers})
+    axios.get('http://127.0.0.1:8000/api/projects', { headers })
       .then(response => {
         const projects = response.data.results
         this.setState(
@@ -97,7 +98,7 @@ class App extends React.Component {
         console.log(error)
         this.setState({ projects: [] })
       });
-    axios.get('http://127.0.0.1:8000/api/notes', {headers})
+    axios.get('http://127.0.0.1:8000/api/notes', { headers })
       .then(response => {
         const notes = response.data.results
         this.setState(
@@ -109,6 +110,27 @@ class App extends React.Component {
         console.log(error)
         this.setState({ notes: [] })
       });
+  }
+
+  deleteProject(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://127.0.0.1:8000/api/projects/${id}/`, { headers })
+      .then(response => {
+        this.setState({ projects: this.state.projects.filter((item) => item.id !== id) })
+      }).catch(error => { console.log(error) })
+  }
+
+  createProject(title, repo_link, developers) {
+    const headers = this.get_headers()
+    const data = { title: title, repo_link: repo_link, developers: [...developers], notes: [] }
+    console.log(data)
+    axios.post(`http://127.0.0.1:8000/api/projects/`, data, { headers })
+      .then(response => {
+        let new_project = response.data
+        const developers = this.state.users.filter((item) => item.id === new_project.developers)
+        new_project.developers = developers
+        this.setState({ projects: [...this.state.projects, new_project] })
+      }).catch(error => console.log(error))
   }
 
   componentDidMount() {
@@ -131,17 +153,20 @@ class App extends React.Component {
                 <Link to='/notes'>notes</Link>
               </li>
               <li>
-                {this.is_authenticated() ? <button onClick={()=>this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
+                {this.is_authenticated() ? <button onClick={() => this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
               </li>
             </ul>
           </nav>
           <Switch>
             <Route exact path='/users' component={() => <UsersList users={this.state.users} />} />
-            <Route exact path='/projects' component={() => <ProjectList items={this.state.projects} />} />
+            <Route exact path='/projects/create' component={() => 
+              <ProjectForm developers={this.state.users} createProject={(title, repo_link, developers) => this.createProject(title, repo_link, developers)} />} />
+            <Route exact path='/projects' component={
+              () => <ProjectList items={this.state.projects} deleteProject={(id) => this.deleteProject(id)} />} />
             <Route exact path='/notes' component={() => <ToDoList items={this.state.notes} />} />
             <Route exact path='/login' component={
               () => <LoginForm get_token={(username, password) => this.get_token(username, password)} />
-              } />
+            } />
             <Redirect from='/' to='/projects' />
             <Route component={NotFound404} />
           </Switch>

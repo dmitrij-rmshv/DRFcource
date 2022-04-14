@@ -9,12 +9,12 @@ class SimpleNoteModelSerializer(ModelSerializer):
         fields = ('project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
 
 
-class TodoProjectModelSerializer(HyperlinkedModelSerializer):
+class TodoProjectModelSerializer(ModelSerializer):
     # developers = TodoUserModelSerializer(many=True)
     # notes = SimpleNoteModelSerializer(many=True)
     class Meta:
         model = Project
-        fields = ('title', 'repo_link', 'developers', 'notes',)
+        fields = ('id', 'title', 'repo_link', 'developers', 'notes',)
 
 
 class TodoNoteModelSerializer(ModelSerializer):
