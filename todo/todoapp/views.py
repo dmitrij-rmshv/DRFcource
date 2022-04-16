@@ -4,7 +4,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 from .models import Project, ToDo
-from .serializers import TodoProjectModelSerializer, TodoNoteModelSerializer, SimpleNoteModelSerializer
+from .serializers import TodoProjectModelSerializer, TodoNoteModelSerializer, \
+    SimpleNoteModelSerializer, TodoProjectPostSerializer, TodoNotePostSerializer
 from .filters import ProjectFilter
 
 
@@ -17,6 +18,11 @@ class TodoProjectModelViewSet(ModelViewSet):
     serializer_class = TodoProjectModelSerializer
     pagination_class = ProjectLimitOffsetPagination
     filterset_class = ProjectFilter
+
+    def get_serializer_class(self):
+        if self.request.method in ['POST']:
+            return TodoProjectPostSerializer
+        return TodoProjectModelSerializer
 
 
 class ToDoLimitOffsetPagination(LimitOffsetPagination):
@@ -40,4 +46,9 @@ class TodoNoteModelViewSet(ModelViewSet):
         instance.save()
         serializer = SimpleNoteModelSerializer(instance)
         return Response(serializer.data)
+
+    def get_serializer_class(self):
+        if self.request.method in ['POST']:
+            return TodoNotePostSerializer
+        return TodoNoteModelSerializer
 

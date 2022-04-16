@@ -20,9 +20,6 @@ class ProjectForm extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state.title)
-    console.log(this.state.repo_link)
-    console.log(this.state.developers)
     this.props.createProject(this.state.title, this.state.repo_link, this.state.developers)
     event.preventDefault()
   }
@@ -31,15 +28,15 @@ class ProjectForm extends React.Component {
     return (
       <form onSubmit={(event)=> this.handleSubmit(event)}>
         <div className='form-group'>
-          <label for="title">Заголовок проекта: </label>
+          <label htmlFor="title">Заголовок проекта: </label>
           <input type="text" className="form-control" name="title" value={this.state.title} onChange={(event)=>this.handleChange(event)} />
         </div>
         <div className='form-group'>
-          <label for="repo_link">репозиторий: </label>
+          <label htmlFor="repo_link">репозиторий: </label>
           <input type="text" className="form-control" name="repo_link" value={this.state.repo_link} onChange={(event)=>this.handleChange(event)} />
         </div>
         <div className='form-group'>
-          <label for="developers">разработчики: </label>
+          <label htmlFor="developers">разработчики: </label>
           <select name="developers" className='form-control' multiple={true} 
             onChange={(event)=>this.handleDevelopersChange(event)}>{this.props.developers.map((item)=>
             <option value={item.uid}>{item.first_name} {item.last_name}</option>)}
