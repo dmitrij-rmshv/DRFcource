@@ -14,7 +14,13 @@ class TodoProjectModelSerializer(HyperlinkedModelSerializer):
     # notes = SimpleNoteModelSerializer(many=True)
     class Meta:
         model = Project
-        fields = ('title', 'repo_link', 'developers', 'notes',)
+        fields = ('id', 'title', 'repo_link', 'developers', 'notes',)
+
+
+class TodoProjectPostSerializer(ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id', 'title', 'repo_link', 'developers')
 
 
 class TodoNoteModelSerializer(ModelSerializer):
@@ -22,4 +28,9 @@ class TodoNoteModelSerializer(ModelSerializer):
     user = StringRelatedField()
     class Meta:
         model = ToDo
-        fields = ('project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
+        fields = ('id', 'project', 'user', 'text', 'created_at', 'modified_at', 'is_active')
+
+class TodoNotePostSerializer(ModelSerializer):
+    class Meta:
+        model = ToDo
+        fields = ('id', 'project', 'user', 'text' )
