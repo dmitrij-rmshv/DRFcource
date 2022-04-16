@@ -30,7 +30,8 @@ class App extends React.Component {
       'projects': [],
       'notes': [],
       'token': '',
-      'current_user': ''
+      'current_user': '',
+      'project_search_line': ''
     }
   }
 
@@ -127,7 +128,6 @@ class App extends React.Component {
   createProject(title, repo_link, developers) {
     const headers = this.get_headers()
     const data = { title: title, repo_link: repo_link, developers: developers }
-    console.log(data)
     axios.post(`http://127.0.0.1:8000/api/projects/`, data, { headers })
       .then(response => {
         let new_project = response.data
@@ -135,6 +135,10 @@ class App extends React.Component {
         new_project.developers = developers
         this.setState({ projects: [...this.state.projects, new_project] })
       }).catch(error => console.log(error))
+  }
+
+  searchProject(searchLine) {
+    this.setState({project_search_line: searchLine})
   }
 
   deleteNote(id) {
@@ -147,11 +151,8 @@ class App extends React.Component {
 
   createNote(project, text) {
     const headers = this.get_headers()
-    console.log(this.state.current_user)
     const author = this.state.users.filter((item) => item.username === this.state.current_user)[0].uid
-    console.log(author)
     const data = { project: project, text: text, user: author }
-    console.log(data)
     axios.post(`http://127.0.0.1:8000/api/notes/`, data, { headers })
       .then(response => {
         let new_note = response.data
@@ -188,7 +189,7 @@ class App extends React.Component {
             <Route exact path='/projects/create' component={() => 
               <ProjectForm developers={this.state.users} createProject={(title, repo_link, developers) => this.createProject(title, repo_link, developers)} />} />
             <Route exact path='/projects' component={
-              () => <ProjectList items={this.state.projects} deleteProject={(id) => this.deleteProject(id)} />} />
+              () => <ProjectList items={this.state.projects.filter((item) => item.title.includes(this.state.project_search_line))} deleteProject={(id) => this.deleteProject(id)} searchLine={this.state.project_search_line} searchProject={(searchLine) => this.searchProject(searchLine)} />} />
             <Route exact path='/notes/create' component={() => 
               <TodoForm projects={this.state.projects} createNote={(project, text) => this.createNote(project, text)} />} />
             <Route exact path='/notes' component={() => <ToDoList items={this.state.notes} deleteNote={(id) => this.deleteNote(id)} />} />
