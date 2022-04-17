@@ -58,7 +58,7 @@ class App extends React.Component {
   }
 
   get_token(username, password) {
-    axios.post('http://127.0.0.1:8000/api-token-auth/', {
+    axios.post('http://134.0.117.212:8000/api-token-auth/', {
       username: username,
       password: password
     })
@@ -79,7 +79,7 @@ class App extends React.Component {
 
   load_data() {
     const headers = this.get_headers()
-    axios.get('http://127.0.0.1:8000/api/users', { headers })
+    axios.get('http://134.0.117.212:8000/api/users', { headers })
       .then(response => {
         const users = response.data.results
         this.setState(
@@ -91,7 +91,7 @@ class App extends React.Component {
         console.log(error)
         this.setState({ users: [] })
       });
-    axios.get('http://127.0.0.1:8000/api/projects', { headers })
+    axios.get('http://134.0.117.212:8000/api/projects', { headers })
       .then(response => {
         const projects = response.data.results
         this.setState(
@@ -103,7 +103,7 @@ class App extends React.Component {
         console.log(error)
         this.setState({ projects: [] })
       });
-    axios.get('http://127.0.0.1:8000/api/notes', { headers })
+    axios.get('http://134.0.117.212:8000/api/notes', { headers })
       .then(response => {
         const notes = response.data.results
         this.setState(
@@ -119,7 +119,7 @@ class App extends React.Component {
 
   deleteProject(id) {
     const headers = this.get_headers()
-    axios.delete(`http://127.0.0.1:8000/api/projects/${id}/`, { headers })
+    axios.delete(`http://134.0.117.212:8000/api/projects/${id}/`, { headers })
       .then(response => {
         this.setState({ projects: this.state.projects.filter((item) => item.id !== id) })
       }).catch(error => { console.log(error) })
@@ -128,7 +128,7 @@ class App extends React.Component {
   createProject(title, repo_link, developers) {
     const headers = this.get_headers()
     const data = { title: title, repo_link: repo_link, developers: developers }
-    axios.post(`http://127.0.0.1:8000/api/projects/`, data, { headers })
+    axios.post(`http://134.0.117.212:8000/api/projects/`, data, { headers })
       .then(response => {
         let new_project = response.data
         const developers = this.state.users.filter((item) => item.id === new_project.developers)
@@ -143,7 +143,7 @@ class App extends React.Component {
 
   deleteNote(id) {
     const headers = this.get_headers()
-    axios.delete(`http://127.0.0.1:8000/api/notes/${id}/`, { headers })
+    axios.delete(`http://134.0.117.212:8000/api/notes/${id}/`, { headers })
       .then(response => {
         this.setState({ notes: this.state.notes.filter((item) => item.id !== id) })
       }).catch(error => { console.log(error) })
@@ -153,7 +153,7 @@ class App extends React.Component {
     const headers = this.get_headers()
     const author = this.state.users.filter((item) => item.username === this.state.current_user)[0].uid
     const data = { project: project, text: text, user: author }
-    axios.post(`http://127.0.0.1:8000/api/notes/`, data, { headers })
+    axios.post(`http://134.0.117.212:8000/api/notes/`, data, { headers })
       .then(response => {
         let new_note = response.data
         this.setState({ notes: [...this.state.notes, new_note] })
